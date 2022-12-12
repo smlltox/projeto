@@ -20,12 +20,12 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "sequencia")
-    @SequenceGenerator(name="sequencia", sequenceName="usuario_seq")
+    @SequenceGenerator(name="sequencia", sequenceName="usuario_seq", initialValue = 1, allocationSize = 1)
     private Integer id;
 
     @NotNull
     @Size(min = 1, max = 25)
-    @Pattern(regexp = "[^0-9]*", message = "Must not contain numbers")
+    @Pattern(regexp = "[^0-9]*")
     private String usuario;
 
     @NotNull

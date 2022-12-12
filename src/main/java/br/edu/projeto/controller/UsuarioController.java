@@ -1,5 +1,7 @@
 package br.edu.projeto.controller;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -24,12 +26,15 @@ public class UsuarioController {
     private UsuarioDAO usuarioDAO;
 
     private Usuario novoUsuario;
+    
+    private List<Usuario> listaUsuarios;
 
     //Executa após instanciar classe UsuarioController, ou seja, 
     //a cada requisição (RequestScoped)
     @PostConstruct
     public void inicializarUsuario() {
         novoUsuario = new Usuario();
+        listaUsuarios = usuarioDAO.findAllHQL();
     }
 
     public void register() throws Exception {
@@ -70,5 +75,16 @@ public class UsuarioController {
 
 	public void setNovoUsuario(Usuario novoUsuario) {
 		this.novoUsuario = novoUsuario;
+	}
+
+	public List<Usuario> getListaUsuarios() {
+		if (listaUsuarios == null) {
+			listaUsuarios = usuarioDAO.findAllHQL();
+		}
+		return listaUsuarios;
+	}
+
+	public void setListaUsuarios(List<Usuario> listaUsuarios) {
+		this.listaUsuarios = listaUsuarios;
 	}
 }
