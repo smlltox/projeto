@@ -9,6 +9,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import br.edu.projeto.model.Usuario;
 
 @Stateful

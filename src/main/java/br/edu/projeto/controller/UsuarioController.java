@@ -9,6 +9,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import br.edu.projeto.dao.UsuarioDAO;
 import br.edu.projeto.model.Usuario;
 
@@ -39,6 +41,7 @@ public class UsuarioController {
 
     public void register() throws Exception {
         try {
+        	novoUsuario.setSenha(DigestUtils.md5Hex(novoUsuario.getSenha()));
             usuarioDAO.save(novoUsuario);
             FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registered!", "Registration successful");
             facesContext.addMessage(null, m);

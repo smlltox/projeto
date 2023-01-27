@@ -5,8 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -15,27 +13,25 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-@Table(name = "usuario")
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "sequencia")
-    @SequenceGenerator(name="sequencia", sequenceName="usuario_seq", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
     private Integer id;
 
     @NotNull
-    @Size(min = 1, max = 25)
-    @Pattern(regexp = "[^0-9]*")
+    @Size(min = 1, max = 25, message = "Mensagem customizada de erro! O nome do usuário deve ter no máximo 25 caracteres.")
+    @Pattern(regexp = "[^0-9]*", message = "O nome de usuário não pode conter digitos.")
     private String usuario;
 
     @NotNull
-    @Size(min = 1, max = 25)
+    @NotEmpty
     private String senha;
     
     @NotNull
     @NotEmpty
     @Email
-    @Column(name = "email")
     private String email;
 
 	public Integer getId() {
