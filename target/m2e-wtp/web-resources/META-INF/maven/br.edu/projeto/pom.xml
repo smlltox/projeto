@@ -55,8 +55,8 @@
         <version.war.plugin>3.3.1</version.war.plugin>
 
         <!-- maven-compiler-plugin -->
-        <maven.compiler.target>1.7</maven.compiler.target>
-        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.17</maven.compiler.target>
+        <maven.compiler.source>1.17</maven.compiler.source>
     </properties>
 
 
@@ -103,6 +103,14 @@
             <artifactId>cdi-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        
+        <!-- Jakarta Security API-->
+        <dependency>
+	        <groupId>javax</groupId>
+	        <artifactId>javaee-web-api</artifactId>
+	        <version>8.0</version>
+	        <scope>provided</scope>
+	    </dependency>
 
         <!-- Import the Common Annotations API (JSR-250), we use provided scope 
             as the API is included in JBoss WildFly -->
@@ -176,13 +184,6 @@
             <artifactId>hibernate-validator-annotation-processor</artifactId>
             <scope>provided</scope>
         </dependency>
-		
-		<!-- Dependência para usar Função Hash na senha -->
-		<dependency>
-		    <groupId>commons-codec</groupId>
-		    <artifactId>commons-codec</artifactId>
-		    <version>1.15</version>
-		</dependency>
 
     </dependencies>
 
