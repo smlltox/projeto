@@ -35,9 +35,9 @@
             <p>Enforces annotation-based constraints defined on the
                 model class.</p>
             <h:panelGrid columns="3" columnClasses="titleCell">
-                <h:outputLabel for="name" value="Usuario:" />
-                <h:inputText id="name" value="#{usuarioController.novoUsuario.usuario}" />
-                <h:message for="name" errorClass="invalid" />
+                <h:outputLabel for="usuario" value="Usuário:" />
+                <h:inputText id="usuario" value="#{usuarioController.novoUsuario.usuario}" />
+                <h:message for="usuario" errorClass="invalid" />
 
                 <h:outputLabel for="email" value="Email:" />
                 <h:inputText id="email" value="#{usuarioController.novoUsuario.email}" />
@@ -46,7 +46,6 @@
 				<h:outputLabel for="senha" value="Senha:" />
                 <h:inputText id="senha" value="#{usuarioController.novoUsuario.senha}" />
                 <h:message for="senha" errorClass="invalid" />
-  
 				
             </h:panelGrid>
 

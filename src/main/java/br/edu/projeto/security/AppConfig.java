@@ -16,7 +16,6 @@ import javax.security.enterprise.identitystore.DatabaseIdentityStoreDefinition;
         dataSourceLookup = "java:/PostgresDS",
         callerQuery = "SELECT senha FROM usuario WHERE usuario = ?",
         groupsQuery = "SELECT permissao FROM tipo_permissao JOIN permissao USING (id_tipo_permissao) JOIN usuario USING (id_usuario) WHERE usuario = ?"
-        //groupsQuery = "SELECT usuario FROM usuario WHERE usuario = ?"
 )
 
 @ApplicationScoped

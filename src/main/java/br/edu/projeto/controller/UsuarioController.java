@@ -11,7 +11,9 @@ import javax.inject.Named;
 import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 
 import br.edu.projeto.dao.UsuarioDAO;
+import br.edu.projeto.model.TipoPermissao;
 import br.edu.projeto.model.Usuario;
+import br.edu.projeto.util.Permissao;
 
 //@Model equivale a essas duas anotações
 @RequestScoped
@@ -38,19 +40,24 @@ public class UsuarioController {
     @PostConstruct
     public void inicializarUsuario() {
         novoUsuario = new Usuario();
+        TipoPermissao permissao = new TipoPermissao();
+        permissao.setPermissao(Permissao.CLIENTE);
+        permissao.addUsuario(novoUsuario);
         listaUsuarios = usuarioDAO.findAllHQL();
     }
 
-    public void register() throws Exception {
+    public void register(){
         try {
+        	if (!usuarioDAO.isUsuarioUnique(novoUsuario.getUsuario())) 
+                throw new Exception("Já existe um usuário com esse nome!");       	
         	novoUsuario.setSenha(passwordHash.generate(novoUsuario.getSenha().toCharArray()));
             usuarioDAO.save(novoUsuario);
-            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registered!", "Registration successful");
+            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário criado!", "Registro Salvo.");
             facesContext.addMessage(null, m);
             inicializarUsuario();
         } catch (Exception e) {
             String errorMessage = getRootErrorMessage(e);
-            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "Registration unsuccessful");
+            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "Registro inválido.");
             facesContext.addMessage(null, m);
         }
     }
