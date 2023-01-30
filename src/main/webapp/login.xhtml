@@ -9,12 +9,14 @@
         <h1>Página de Login</h1>
 
         <h:form>
-            <h:panelGrid columns="2">
+            <h:panelGrid columns="3">
                 <h:outputLabel for="usuario" value="Usuario:" />
                 <h:inputText id="usuario" value="#{loginController.usuario.usuario}" />
+                <h:message for="usuario" errorClass="invalid" />
 
 				<h:outputLabel for="senha" value="Senha:" />
-                <h:inputText id="senha" value="#{loginController.usuario.senha}" />			
+                <h:inputText id="senha" value="#{loginController.usuario.senha}" />
+                <h:message for="senha" errorClass="invalid" />		
             </h:panelGrid>
 			
             <p>

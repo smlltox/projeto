@@ -7,8 +7,8 @@ import javax.security.enterprise.identitystore.DatabaseIdentityStoreDefinition;
 
 @CustomFormAuthenticationMechanismDefinition(
         loginToContinue = @LoginToContinue(
-                loginPage = "/login.xhtml",
-                errorPage = "/login-error.xhtml"
+                loginPage = "login.xhtml",
+                errorPage = "login-error.xhtml"
         )
 )
 

@@ -46,8 +46,11 @@
         </div>
         <div id="footer">
             <p>
-                This project was generated from a Maven archetype from
-                WildFly.<br />
+            	<h:form>
+	                <h:panelGrid columns="2">
+	                    <h:commandButton value="Logout" action="#{loginController.logout}"/>
+	                </h:panelGrid>
+                </h:form>
             </p>
         </div>
     </div>

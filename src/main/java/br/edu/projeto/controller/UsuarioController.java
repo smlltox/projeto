@@ -1,5 +1,6 @@
 package br.edu.projeto.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -20,7 +21,7 @@ import br.edu.projeto.util.Permissao;
 //Torna classe disponível na camada de visão (html)
 @Named
 public class UsuarioController {
-
+	
 	@Inject
 	//Mensagens de erro para o usuário
     private FacesContext facesContext;
@@ -35,10 +36,14 @@ public class UsuarioController {
     
     private List<Usuario> listaUsuarios;
 
-    //Executa após instanciar classe UsuarioController, ou seja, 
-    //a cada requisição (RequestScoped)
+    //Executa após instanciar classe UsuarioController
     @PostConstruct
     public void inicializarUsuario() {
+    	if (!facesContext.getExternalContext().isUserInRole("ADMINISTRADOR")) {
+    		try {
+				facesContext.getExternalContext().redirect("login-error.xhtml");
+			} catch (IOException e) {e.printStackTrace();}
+    	}
         novoUsuario = new Usuario();
         TipoPermissao permissao = new TipoPermissao();
         permissao.setPermissao(Permissao.CLIENTE);
