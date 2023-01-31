@@ -32,7 +32,7 @@ public class AdminSetup implements ServletContextListener {
 	        String senhaPadrao = "admin";
 	        admin.setSenha(passwordHash.generate(senhaPadrao.toCharArray()));
 	        admin.setUsuario("admin");
-	        TipoPermissao permissao = tipoPermissaoDAO.encontrarPermissao(Permissao.ADMINISTRADOR);
+	        TipoPermissao permissao = tipoPermissaoDAO.encontrarPermissao(Permissao.ADMINISTRADOR.id);
 	        permissao.addUsuario(admin);
 	        usuarioDAO.salvar(admin);
         }

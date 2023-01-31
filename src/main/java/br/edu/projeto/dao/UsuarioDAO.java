@@ -1,5 +1,6 @@
 package br.edu.projeto.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.ejb.Stateful;
@@ -12,7 +13,7 @@ import javax.persistence.criteria.Root;
 import br.edu.projeto.model.Usuario;
 
 @Stateful
-public class UsuarioDAO {
+public class UsuarioDAO implements Serializable{
 
 	@Inject
     private EntityManager em;
