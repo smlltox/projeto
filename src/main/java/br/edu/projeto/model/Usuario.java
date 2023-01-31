@@ -43,7 +43,7 @@ public class Usuario {
     @Email
     private String email;
     
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(
       name = "permissao",
       joinColumns = @JoinColumn(name = "id_usuario"),

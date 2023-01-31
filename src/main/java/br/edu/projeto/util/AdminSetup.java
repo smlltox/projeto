@@ -6,6 +6,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import br.edu.projeto.dao.TipoPermissaoDAO;
 import br.edu.projeto.dao.UsuarioDAO;
 import br.edu.projeto.model.TipoPermissao;
 import br.edu.projeto.model.Usuario;
@@ -18,20 +19,22 @@ public class AdminSetup implements ServletContextListener {
 
     @Inject
     private UsuarioDAO usuarioDAO;
+    
+    @Inject
+    private TipoPermissaoDAO tipoPermissaoDAO;
 
     private Usuario admin;
     
     public void contextInitialized(ServletContextEvent event) {
-        if (usuarioDAO.isUsuarioUnique("admin")){ 	
+        if (usuarioDAO.ehUsuarioUnico("admin")){ 	
 	    	admin = new Usuario();
 	        admin.setEmail("admin@admin.com");
 	        String senhaPadrao = "admin";
 	        admin.setSenha(passwordHash.generate(senhaPadrao.toCharArray()));
 	        admin.setUsuario("admin");
-	        TipoPermissao permissao = new TipoPermissao();
-	        permissao.setPermissao(Permissao.ADMINISTRADOR);
+	        TipoPermissao permissao = tipoPermissaoDAO.encontrarPermissao(Permissao.ADMINISTRADOR);
 	        permissao.addUsuario(admin);
-	        usuarioDAO.save(admin);
+	        usuarioDAO.salvar(admin);
         }
     }
 }

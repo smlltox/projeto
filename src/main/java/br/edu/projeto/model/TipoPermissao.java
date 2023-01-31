@@ -3,7 +3,6 @@ package br.edu.projeto.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -31,7 +30,7 @@ public class TipoPermissao {
     @Enumerated(EnumType.STRING)
     private Permissao permissao;
     
-    @ManyToMany(mappedBy = "permissoes", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "permissoes", fetch = FetchType.EAGER)
     private List<Usuario> usuarios = new ArrayList<Usuario>();
 
 	public Integer getId() {

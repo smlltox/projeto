@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="/WEB-INF/templates/default.xhtml">
+    <ui:define name="content">
+        <h1>Welcome to WildFly!</h1>
+
+        <div>
+            <p>You have successfully deployed a Java EE 7 Enterprise
+                Application.</p>
+            <h3>Your application can run on:</h3>
+            <img src="resources/gfx/wildfly_400x130.jpg" />
+        </div>
+
+        <h:form id="cadastro">
+            <h2>Member Registration</h2>
+            <p>Enforces annotation-based constraints defined on the
+                model class.</p>
+            <h:panelGrid columns="3" columnClasses="titleCell">
+                <h:outputLabel for="usuario" value="Usuário:" />
+                <h:inputText id="usuario" value="#{usuarioCadastroController.novoUsuario.usuario}"/>
+                <h:message for="usuario" errorClass="invalid" />
+
+                <h:outputLabel for="email" value="Email:" />
+                <h:inputText id="email" value="#{usuarioCadastroController.novoUsuario.email}" />
+                <h:message for="email" errorClass="invalid" />
+
+				<h:outputLabel for="senha" value="Senha:" />
+                <h:inputText id="senha" value="#{usuarioCadastroController.novoUsuario.senha}" />
+                <h:message for="senha" errorClass="invalid" />
+				
+            </h:panelGrid>
+
+            <p>
+                <h:panelGrid columns="2">
+                    <h:commandButton value="Cadastrar" action="#{usuarioCadastroController.registrar()}"/>
+                    <h:messages styleClass="messages" errorClass="invalid" infoClass="valid" warnClass="warning" globalOnly="true" />
+                </h:panelGrid>
+            </p>
+        </h:form>
+         
+        <h:form id="tabela">
+	        <h2>Usuários</h2>
+	        <h:panelGroup rendered="#{empty usuarioCadastroController.listaUsuarios}">
+	            <em>Sem usuários registrados</em>
+	        </h:panelGroup>
+	        <h:dataTable var="usuario" value="#{usuarioCadastroController.listaUsuarios}"
+	            rendered="#{not empty usuarioCadastroController.listaUsuarios}"
+	            styleClass="simpletablestyle">
+	            <h:column>
+	                <f:facet name="header">Id</f:facet>
+	                #{usuario.id}
+	            </h:column>
+	            <h:column>
+	                <f:facet name="header">Usuário</f:facet>
+	                #{usuario.usuario}
+	            </h:column>
+	            <h:column>
+	                <f:facet name="header">Senha</f:facet>
+	                #{usuario.senha}
+	            </h:column>
+	            <h:column>
+	                <f:facet name="header">E-mail</f:facet>
+	                #{usuario.email}
+	            </h:column>
+	            <h:column>
+	            	<h:commandButton action="#{usuarioCadastroController.editar()}" value="Editar" >
+	            		<f:setPropertyActionListener value="#{usuario}" target="#{usuarioCadastroController.usuarioSelecionado}" />
+	            	</h:commandButton>
+	            </h:column>
+	            <h:column>
+	            	<h:commandButton action="#{usuarioCadastroController.excluir()}" value="Excluir">
+	            		<f:setPropertyActionListener value="#{usuario}" target="#{usuarioCadastroController.usuarioSelecionado}" />
+	            	</h:commandButton>
+	            </h:column>
+	       	</h:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

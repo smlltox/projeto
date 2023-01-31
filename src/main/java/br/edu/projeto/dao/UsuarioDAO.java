@@ -17,11 +17,11 @@ public class UsuarioDAO {
 	@Inject
     private EntityManager em;
 	
-	public Usuario findById(Long id) {
+	public Usuario encontrarId(Integer id) {
         return em.find(Usuario.class, id);
     }
 	
-	public Boolean isUsuarioUnique(String u) {
+	public Boolean ehUsuarioUnico(String u) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Usuario> criteria = cb.createQuery(Usuario.class);
         Root<Usuario> usuario = criteria.from(Usuario.class);
@@ -32,12 +32,20 @@ public class UsuarioDAO {
         return false;
     }
 	
-	public List<Usuario> findAllHQL() {
+	public List<Usuario> listarTodos() {
 	    return em.createQuery("SELECT a FROM Usuario a ", Usuario.class).getResultList();      
 	}
 	
-	public void save(Usuario u) {
+	public void salvar(Usuario u) {
 		em.persist(u);
+	}
+	
+	public void atualizar(Usuario u) {
+		em.merge(u);
+	}
+	
+	public void excluir(Usuario u) {
+		em.remove(em.getReference(Usuario.class, u.getId()));
 	}
 	
 }
