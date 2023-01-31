@@ -8,6 +8,7 @@
     template="/WEB-INF/templates/default.xhtml">  
     <ui:define name="content">     
         <h:form id="dialogs">
+        	<p:growl id="messages"/>
 	        <p:dialog header="Novo Usuário" showEffect="fade" modal="true" widgetVar="usuarioDialog" responsive="true">   
 	            <p:outputPanel id="usuario-conteudo-dialog" class="ui-fluid">
 	                <p:outputPanel rendered="#{not empty cadastroUsuarioController.usuario}">
@@ -22,7 +23,7 @@
 	                    <div class="field">
 	                        <p:outputLabel for="senha">Senha</p:outputLabel>
 	                        <p:password id="senha" value="#{cadastroUsuarioController.usuario.senha}" toggleMask="true" redisplay="true"
-	                        feedback="true" promptLabel="Informe a senha" weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte"/>
+	                        feedback="true" weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte" validatorMessage="Informe a senha"/>
 	                    </div>
 	                    <div class="field">
                         <p:outputLabel for="permissao">Permissão</p:outputLabel>
@@ -35,7 +36,7 @@
 	
 	            <f:facet name="footer">
 	                <p:commandButton value="Salvar" icon="pi pi-check" actionListener="#{cadastroUsuarioController.salvar}"
-	                    update="usuario-conteudo-dialog" process="usuario-conteudo-dialog @this" />
+	                    update="usuario-conteudo-dialog dialogs:messages" process="usuario-conteudo-dialog @this" />
 	                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('usuarioDialog').hide()" class="ui-button-secondary" type="button" />
 	            </f:facet>
 	        </p:dialog>
@@ -47,11 +48,6 @@
 	            <p:commandButton value="Não" type="button" styleClass="ui-button-secondary" icon="pi pi-times" onclick="PF('removerUsuarioDialog').hide()" />
 	        </p:confirmDialog>
 		
-	<!--        <p:confirmDialog global="true" showEffect="fade" width="300">
-	            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-	            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
-	                icon="pi pi-times" />
-	        </p:confirmDialog>  --> 
         </h:form>     
         
         <h:form id="form">
@@ -83,7 +79,7 @@
 
 	            <p:column>
 	                <p:commandButton icon="pi pi-pencil" update=":dialogs:usuario-conteudo-dialog"
-	                    oncomplete="PF('usuarioDialog').show()" actionListener="#{cadastroUsuarioController.alterar}"
+	                    oncomplete="PF('usuarioDialog').show()" action="#{cadastroUsuarioController.alterar}"
 	                    styleClass="edit-button rounded-button ui-button-success" process="@this">
 	                    <f:setPropertyActionListener value="#{us}" target="#{cadastroUsuarioController.usuario}" />
 	                    <p:resetInput target=":dialogs:usuario-conteudo-dialog" />

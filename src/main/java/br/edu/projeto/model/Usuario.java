@@ -40,7 +40,7 @@ public class Usuario {
     
     @NotNull
     @NotEmpty
-    @Email
+    @Email(message = "Não é um endereço de E-mail válido")
     private String email;
     
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
