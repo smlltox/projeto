@@ -20,14 +20,19 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
+//Anotação que indica classe modelada pelo OCR - JPA (Hibernate)
 @Entity
 public class Usuario {
 
+	//Chave primária da tabela
     @Id
+    //Gerada automaticamente pelo banco
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //Nome da coluna na tabela, necessário indicar quando atributo não tiver o mesmo nome
     @Column(name = "id_usuario")
     private Integer id;
 
+    //Indica validações e mensagens de erro para atributo
     @NotNull
     @Size(min = 1, max = 25, message = "Mensagem customizada de erro! O nome do usuário deve ter no máximo 25 caracteres.")
     @Pattern(regexp = "[^0-9]*", message = "O nome de usuário não pode conter digitos.")
@@ -43,7 +48,12 @@ public class Usuario {
     @Email(message = "Não é um endereço de E-mail válido")
     private String email;
     
+    //Indica mapeamento/relacionamento entre tabela
+    //fetchType EAGER indica que atributo será carregado automaticamente, enquanto LAZY (padrão) indicaria carregamento sob demanda 
+    //LAZY é mais eficiente pois economiza recursos computacionais mas é mais complexo de se trabalhar
+    //cascadeType, MERGE indica que alterações serão transmitidas para elementos dependentes (tabelas relacionadas) automaticamente
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    //Mapeia tabela intermediária (criada em relacionamentos Muitos para muitos), não é necessário uma classe modelo para a tabela intermediária
     @JoinTable(
       name = "permissao",
       joinColumns = @JoinColumn(name = "id_usuario"),
@@ -51,6 +61,7 @@ public class Usuario {
     )
     private List<TipoPermissao> permissoes = new ArrayList<TipoPermissao>();
 
+    //GETs e SETs são necessários para todos os atributos para que Hibernate funcione adequadamente
 	public Integer getId() {
 		return id;
 	}

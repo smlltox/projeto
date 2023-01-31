@@ -11,6 +11,8 @@ import br.edu.projeto.dao.UsuarioDAO;
 import br.edu.projeto.model.TipoPermissao;
 import br.edu.projeto.model.Usuario;
 
+//Executa classe uma única vez ao iniciar a aplicação no servidor
+//Recurso usado para criar o primeiro usuário ADMINISTRADOR no sistema, se o mesmo não existir ainda
 @WebListener
 public class AdminSetup implements ServletContextListener {
 

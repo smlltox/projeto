@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import br.edu.projeto.util.Permissao;
 
 @Entity
+//Indica noem da tabela correspondente no banco, necessário somente quando nome da classe não é igual
 @Table(name = "tipo_permissao")
 public class TipoPermissao {
 
@@ -30,6 +31,8 @@ public class TipoPermissao {
     @Enumerated(EnumType.STRING)
     private Permissao permissao;
     
+    //No relacionamento ManytoMany uma das classes deve ser "dominada" pela outra
+    //A classe dominada possui o parâmetro mappedBy, essa classe nunca persistirá alterações na classe/tabela dominante
     @ManyToMany(mappedBy = "permissoes", fetch = FetchType.EAGER)
     private List<Usuario> usuarios = new ArrayList<Usuario>();
 
@@ -53,6 +56,8 @@ public class TipoPermissao {
 		return usuarios;
 	}
 
+	//Para persistir elementos de uma classe dominada é necessário adicionar o elementos de ambos os lados
+	//Por isso é comum fazer um método especial para isso
 	public void addUsuario(Usuario usuario) {
 		this.usuarios.add(usuario);
 		usuario.getPermissoes().add(this);

@@ -21,11 +21,21 @@ import br.edu.projeto.dao.UsuarioDAO;
 import br.edu.projeto.model.TipoPermissao;
 import br.edu.projeto.model.Usuario;
 
+//Escopo do objeto da classe (Bean)
+//ApplicationScoped é usado quando o objeto é único na aplicação (compartilhado entre usuários), permanece ativo enquanto a aplicação estiver ativa
+//SessionScoped é usado quando o objeto é único por usuário, permanece ativo enquanto a sessão for ativa
+//ViewScoped é usado quando o objeto permanece ativo enquanto não houver um redirect (acesso a nova página)
+//RequestScoped é usado quando o objeto só existe naquela requisição específica
+//Quanto maior o escopo, maior o uso de memória no lado do servidor (objeto permanece ativo por mais tempo)
+//Escopos maiores que Request exigem que classes sejam serializáveis assim como todos os seus atributos (recurso de segurança)
+//atributos que não podem ser serializáveis devem ser marcados como transient (eles são novamente criados a cada nova requisição independente do escopo da classe)
 @ViewScoped
-//Torna classe disponível na camada de visão (html)
+//Torna classe disponível na camada de visão (html) - são chamados de Beans ou ManagedBeans (gerenciados pelo JSF/EJB)
 @Named
 public class CadastroUsuarioController implements Serializable {
 
+	//Anotação que marca atributo para ser gerenciado pelo CDI
+	//O CDI criará uma instância do objeto automaticamente quando necessário
 	@Inject
 	private FacesContext facesContext;
 	
@@ -46,13 +56,16 @@ public class CadastroUsuarioController implements Serializable {
 	
 	private List<Integer> permissoesSelecionadas;
 	
+	//Anotação que força execução do método após o construtor da classe ser executado
     @PostConstruct
     public void init() {
+    	//Verifica se usuário está autenticado e possui a permissão adequada
     	if (!this.facesContext.getExternalContext().isUserInRole("ADMINISTRADOR")) {
     		try {
 				this.facesContext.getExternalContext().redirect("login-error.xhtml");
 			} catch (IOException e) {e.printStackTrace();}
     	}
+    	//Inicializa elementos importantes
     	this.permissoesSelecionadas = new ArrayList<Integer>();
     	this.listaUsuarios = usuarioDAO.listarTodos();
     	this.permissoes = new ArrayList<SelectItem>();
@@ -62,10 +75,12 @@ public class CadastroUsuarioController implements Serializable {
     	}
     }
 	
+    //Chamado pelo botão novo
 	public void novoCadastro() {
         this.setUsuario(new Usuario());
     }
 	
+	//Chamado ao salvar cadastro de usuário (novo ou edição)
 	public void salvar() {
         if (usuarioValido()) {
     		this.usuario.getPermissoes().clear();
@@ -83,6 +98,7 @@ public class CadastroUsuarioController implements Serializable {
 		        	this.usuarioDAO.atualizar(this.usuario);
 		        	this.facesContext.addMessage(null, new FacesMessage("Usuário Atualizado"));
 		        }
+		        //Atualiza e executa elementos Javascript na tela assincronamente
 			    PrimeFaces.current().executeScript("PF('usuarioDialog').hide()");
 			    PrimeFaces.current().ajax().update("form:messages", "form:dt-usuarios");
 	        } catch (Exception e) {
@@ -92,6 +108,7 @@ public class CadastroUsuarioController implements Serializable {
         }
 	}	
 	
+	//Realiza validações adicionais (não relizadas no modelo) e/ou complexas/interdependentes
 	private boolean usuarioValido() {
 		if (this.permissoesSelecionadas.isEmpty()) {
 			this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Selecione ao menos uma permissão para o novo usuário.", null));
@@ -104,6 +121,7 @@ public class CadastroUsuarioController implements Serializable {
 		return true;
 	}
 	
+	//Chamado pelo botão remover da tabela
 	public void remover() {
 		try {
 			this.usuarioDAO.excluir(this.usuario);
@@ -117,6 +135,7 @@ public class CadastroUsuarioController implements Serializable {
         }
 	}
 	
+	//Chamado pelo botão alterar da tabela
 	public void alterar() {
 		this.permissoesSelecionadas.clear();
 		for (TipoPermissao p: this.usuario.getPermissoes())
@@ -124,6 +143,7 @@ public class CadastroUsuarioController implements Serializable {
 		this.usuario.setSenha("");
 	}
 	
+	//Captura mensagem de erro das validações do Hibernate
 	private String getMensagemErro(Exception e) {
         String erro = "Falha no sistema!. Contacte o administrador do sistema.";
         if (e == null) 
@@ -136,6 +156,7 @@ public class CadastroUsuarioController implements Serializable {
         return erro;
     }
 	
+	//GETs e SETs
 	public Usuario getUsuario() {
 		return usuario;
 	}

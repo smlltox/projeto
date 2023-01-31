@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.edu.projeto.model.Usuario;
 
+//Controlador da página de Login
 @Named 
 @RequestScoped
 public class LoginController {
