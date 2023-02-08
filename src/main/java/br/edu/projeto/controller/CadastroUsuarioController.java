@@ -28,7 +28,6 @@ import br.edu.projeto.model.Usuario;
 //RequestScoped é usado quando o objeto só existe naquela requisição específica
 //Quanto maior o escopo, maior o uso de memória no lado do servidor (objeto permanece ativo por mais tempo)
 //Escopos maiores que Request exigem que classes sejam serializáveis assim como todos os seus atributos (recurso de segurança)
-//atributos que não podem ser serializáveis devem ser marcados como transient (eles são novamente criados a cada nova requisição independente do escopo da classe)
 @ViewScoped
 //Torna classe disponível na camada de visão (html) - são chamados de Beans ou ManagedBeans (gerenciados pelo JSF/EJB)
 @Named
@@ -39,6 +38,8 @@ public class CadastroUsuarioController implements Serializable {
 	@Inject
 	private FacesContext facesContext;
 	
+	//atributos que não podem ser serializáveis (normalmente dependências externas) devem ser marcados como transient 
+	//(eles são novamente criados a cada nova requisição independente do escopo da classe)
 	@Inject
     transient private Pbkdf2PasswordHash passwordHash;
 	
@@ -68,8 +69,11 @@ public class CadastroUsuarioController implements Serializable {
     	//Inicializa elementos importantes
     	this.permissoesSelecionadas = new ArrayList<Integer>();
     	this.listaUsuarios = usuarioDAO.listarTodos();
+    	//O elemento de checkbox da tela usa uma lista do tipo SelectItem
     	this.permissoes = new ArrayList<SelectItem>();
+    	//É necessário mapear a lista de permissões manualmente para o tipo SelectItem
     	for (TipoPermissao p: this.tipoPermissaoDAO.listarTodos()) {
+    		//O primeiro elemento é a chave (oculta) e o segundo a descrição que aparecerá para o usuário em tela
     		SelectItem i = new SelectItem(p.getPermissao().id, p.getPermissao().name());		
     		this.permissoes.add(i);
     	}
@@ -82,21 +86,28 @@ public class CadastroUsuarioController implements Serializable {
 	
 	//Chamado ao salvar cadastro de usuário (novo ou edição)
 	public void salvar() {
+		//Chama método de verificação se usuário é válido (regras negociais)
         if (usuarioValido()) {
+        	//Limpa lista de permissões de usuário (é mais simples limpar e adicionar todas novamente depois)
     		this.usuario.getPermissoes().clear();
+    		//Adiciona todas as permissões selecionadas em tela
     		for (Integer id: this.permissoesSelecionadas) {
     			TipoPermissao permissao = tipoPermissaoDAO.encontrarPermissao(id);
+    			//Chama método que adiciona o usuário para a permissão e vice-versa (necessário em relacionamento ManyToMany)
     			permissao.addUsuario(this.usuario);	
     		}
         	try {
+        		//Aplica Hash na senha
         		this.usuario.setSenha(this.passwordHash.generate(this.usuario.getSenha().toCharArray()));
-		        if (this.usuario.getId() == null) {
+		        //Verifica se é um novo cadastro ou é a alteração de um cadastro
+        		if (this.usuario.getId() == null) {
 		        	this.usuarioDAO.salvar(this.usuario);
 		        	this.facesContext.addMessage(null, new FacesMessage("Usuário Criado"));
 		        } else {
 		        	this.usuarioDAO.atualizar(this.usuario);
 		        	this.facesContext.addMessage(null, new FacesMessage("Usuário Atualizado"));
 		        }
+        		//Após salvar usuário é necessário recarregar lista que popula tabela com os novos dados
 		        this.listaUsuarios = usuarioDAO.listarTodos();
 		        //Atualiza e executa elementos Javascript na tela assincronamente
 			    PrimeFaces.current().executeScript("PF('usuarioDialog').hide()");
@@ -125,8 +136,10 @@ public class CadastroUsuarioController implements Serializable {
 	public void remover() {
 		try {
 			this.usuarioDAO.excluir(this.usuario);
+			//Após excluir usuário é necessário recarregar lista que popula tabela com os novos dados
 			this.listaUsuarios = usuarioDAO.listarTodos();
-	        this.usuario = null;
+	        //Limpa seleção de usuário
+			this.usuario = null;
 	        this.facesContext.addMessage(null, new FacesMessage("Usuário Removido"));
 	        PrimeFaces.current().ajax().update("form:messages", "form:dt-usuarios");
         } catch (Exception e) {
@@ -157,6 +170,8 @@ public class CadastroUsuarioController implements Serializable {
     }
 	
 	//GETs e SETs
+	//GETs são necessários para elementos visíveis em tela
+	//SETs são necessários para elementos que serão editados em tela
 	public Usuario getUsuario() {
 		return usuario;
 	}
