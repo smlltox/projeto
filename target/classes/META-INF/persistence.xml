@@ -9,9 +9,5 @@
    	<persistence-unit name="primary">
    		<!-- Configuração de Pool de Conexões com o SGBD (foi configurado dentro do servidor de aplicação) -->
       	<jta-data-source>java:/PostgresDS</jta-data-source>
-      	<!-- Mude o valor para true para imprimir as Queries realizadas pelo Hibernate -->
-      	<properties>
-         	<property name="hibernate.show_sql" value="false" />
-      	</properties>
 	</persistence-unit>
 </persistence>

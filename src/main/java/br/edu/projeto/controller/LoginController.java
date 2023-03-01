@@ -1,4 +1,4 @@
-package br.edu.projeto.security;
+package br.edu.projeto.controller;
 
 import java.io.IOException;
 
