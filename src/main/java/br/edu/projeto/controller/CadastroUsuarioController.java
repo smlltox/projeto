@@ -81,7 +81,7 @@ public class CadastroUsuarioController implements Serializable {
 	
     //Chamado pelo botão novo
 	public void novoCadastro() {
-        this.setUsuario(new Usuario());
+        this.usuario = new Usuario();
     }
 	
 	//Chamado ao salvar cadastro de usuário (novo ou edição)
@@ -96,26 +96,25 @@ public class CadastroUsuarioController implements Serializable {
     			//Chama método que adiciona o usuário para a permissão e vice-versa (necessário em relacionamento ManyToMany)
     			permissao.addUsuario(this.usuario);	
     		}
-        	try {
-        		//Aplica Hash na senha
-        		this.usuario.setSenha(this.passwordHash.generate(this.usuario.getSenha().toCharArray()));
-		        //Verifica se é um novo cadastro ou é a alteração de um cadastro
-        		if (this.usuario.getId() == null) {
-		        	this.usuarioDAO.salvar(this.usuario);
-		        	this.facesContext.addMessage(null, new FacesMessage("Usuário Criado"));
-		        } else {
-		        	this.usuarioDAO.atualizar(this.usuario);
-		        	this.facesContext.addMessage(null, new FacesMessage("Usuário Atualizado"));
-		        }
-        		//Após salvar usuário é necessário recarregar lista que popula tabela com os novos dados
-		        this.listaUsuarios = usuarioDAO.listarTodos();
-		        //Atualiza e executa elementos Javascript na tela assincronamente
-			    PrimeFaces.current().executeScript("PF('usuarioDialog').hide()");
-			    PrimeFaces.current().ajax().update("form:messages", "form:dt-usuarios");
-	        } catch (Exception e) {
-	            String errorMessage = getMensagemErro(e);
-	            this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, null));
+    		//Aplica Hash na senha
+    		this.usuario.setSenha(this.passwordHash.generate(this.usuario.getSenha().toCharArray()));
+	        //Verifica se é um novo cadastro ou é a alteração de um cadastro
+    		if (this.usuario.getId() == null) {
+	        	if (this.usuarioDAO.insert(this.usuario))
+	        		this.facesContext.addMessage(null, new FacesMessage("Usuário Criado"));
+	        	else
+	        		this.facesContext.addMessage(null, new FacesMessage("Falha ao Criar Usuário"));
+	        } else {
+	        	if (this.usuarioDAO.update(this.usuario))
+	        		this.facesContext.addMessage(null, new FacesMessage("Usuário Atualizado"));
+	        	else
+	        		this.facesContext.addMessage(null, new FacesMessage("Falha ao Atualizar Usuário"));
 	        }
+    		//Após salvar usuário é necessário recarregar lista que popula tabela com os novos dados
+	        this.listaUsuarios = usuarioDAO.listAll();
+	        //Atualiza e executa elementos Javascript na tela assincronamente
+		    PrimeFaces.current().executeScript("PF('usuarioDialog').hide()");
+		    PrimeFaces.current().ajax().update("form:messages", "form:dt-usuarios");
         }
 	}	
 	
@@ -125,7 +124,7 @@ public class CadastroUsuarioController implements Serializable {
 			this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Selecione ao menos uma permissão para o novo usuário.", null));
 			return false;
 		}			
-		if (this.usuario.getId() == null && !this.usuarioDAO.ehUsuarioUnico(this.usuario.getUsuario())) {
+		if (this.usuario.getId() == null && this.usuarioDAO.findByName(this.usuario.getUsuario()).getId() != null) {
 			this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Este nome de usuário já está em uso.", null));
 			return false;
 		}
@@ -135,9 +134,9 @@ public class CadastroUsuarioController implements Serializable {
 	//Chamado pelo botão remover da tabela
 	public void remover() {
 		try {
-			this.usuarioDAO.excluir(this.usuario);
+			this.usuarioDAO.delete(this.usuario);
 			//Após excluir usuário é necessário recarregar lista que popula tabela com os novos dados
-			this.listaUsuarios = usuarioDAO.listarTodos();
+			this.listaUsuarios = usuarioDAO.listAll();
 	        //Limpa seleção de usuário
 			this.usuario = null;
 	        this.facesContext.addMessage(null, new FacesMessage("Usuário Removido"));

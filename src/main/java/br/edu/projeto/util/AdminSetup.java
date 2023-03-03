@@ -33,7 +33,7 @@ public class AdminSetup implements ServletContextListener {
     private Usuario admin;
     
     public void contextInitialized(ServletContextEvent event) {
-        if (usuarioDAO.findByName("admin")!=null){ 	
+        if (usuarioDAO.findByName("admin").getId() == null){ 	
 	    	admin = new Usuario();
 	        admin.setEmail("admin@admin.com");
 	        String senhaPadrao = "admin";
@@ -41,7 +41,7 @@ public class AdminSetup implements ServletContextListener {
 	        admin.setUsuario("admin");
 	        TipoPermissao permissao = tipoPermissaoDAO.findById(Permissao.ADMINISTRADOR.id);
 	        permissao.addUsuario(admin);
-	        usuarioDAO.save(admin);
+	        usuarioDAO.insert(admin);
         }
     }
 }

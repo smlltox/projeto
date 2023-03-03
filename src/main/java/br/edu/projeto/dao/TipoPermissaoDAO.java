@@ -23,25 +23,24 @@ public class TipoPermissaoDAO implements Serializable {
     private DataSource ds;
 	
 	public TipoPermissao findById(Integer id) {
+		TipoPermissao tp = new TipoPermissao();
 		try {
-			Connection con = ds.getConnection();
+			Connection con = this.ds.getConnection();
 			PreparedStatement ps = con.prepareStatement("SELECT permissao FROM tipo_permissao WHERE id_tipo_permissao = ?");
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
-			TipoPermissao tp = new TipoPermissao();
 			if (rs.next()) {
 				tp.setId(id);
 				tp.setPermissao(Permissao.valueOf(rs.getString("permissao")));
 			}
-			return tp;
 		} catch (SQLException e) {e.printStackTrace();}
-        return null;
+        return tp;
     }
 	
     public List<TipoPermissao> listAll() {
     	List<TipoPermissao> permissoes = new ArrayList<TipoPermissao>();
     	try {
-			Connection con = ds.getConnection();
+			Connection con = this.ds.getConnection();
 			PreparedStatement ps = con.prepareStatement("SELECT id_tipo_permissao, permissao FROM tipo_permissao");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
