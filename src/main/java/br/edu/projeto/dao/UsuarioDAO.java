@@ -1,14 +1,16 @@
 package br.edu.projeto.dao;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateful;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.sql.DataSource;
 
 import br.edu.projeto.model.Usuario;
 
@@ -21,42 +23,70 @@ import br.edu.projeto.model.Usuario;
 public class UsuarioDAO implements Serializable{
 
 	@Inject
-	//Cria a conexão e controla a transação com o SGBD (usado pelo Hibernate)
-    private EntityManager em;
+    private DataSource ds;
 	
-	public Usuario encontrarId(Integer id) {
-        return em.find(Usuario.class, id);
+    public Usuario findById(Integer id) {
+		try {
+			Connection con = ds.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT usuario, email FROM usuario WHERE id_usuario = ?");
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			Usuario u = new Usuario();
+			if (rs.next()) {
+				u.setId(id);
+				u.setEmail(rs.getString("email"));
+				u.setUsuario(rs.getString("usuario"));
+			}
+			return u;
+		} catch (SQLException e) {e.printStackTrace();}
+        return null;
     }
-	
-	//Query usando a API Criteria do Hibernate
-	//Indicada para consultas complexas
-	public Boolean ehUsuarioUnico(String u) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Usuario> criteria = cb.createQuery(Usuario.class);
-        Root<Usuario> usuario = criteria.from(Usuario.class);
-        criteria.select(usuario);
-        criteria.where(cb.like(usuario.get("usuario"), u));
-        if (em.createQuery(criteria).getResultList().isEmpty())
-        	return true;
-        return false;
+    
+    public Usuario findByName(String name) {
+		try {
+			Connection con = ds.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT id_usuario, email FROM usuario WHERE usuario = ?");
+			ps.setString(1, name);
+			ResultSet rs = ps.executeQuery();
+			Usuario u = new Usuario();
+			if (rs.next()) {
+				u.setId(rs.getInt("id_usuario"));
+				u.setEmail(rs.getString("email"));
+				u.setUsuario(name);
+			}
+			return u;
+		} catch (SQLException e) {e.printStackTrace();}
+        return null;
     }
-	
-	//Query usando a linguagem HQL do Hibernate
-	//Idnicada para consultas simples
-	public List<Usuario> listarTodos() {
-	    return em.createQuery("SELECT a FROM Usuario a ", Usuario.class).getResultList();      
-	}
-	
-	public void salvar(Usuario u) {
-		em.persist(u);
-	}
-	
-	public void atualizar(Usuario u) {
-		em.merge(u);
-	}
-	
-	public void excluir(Usuario u) {
-		em.remove(em.getReference(Usuario.class, u.getId()));
-	}
-	
+    
+    public List<Usuario> listAll() {
+    	List<Usuario> usuarios = new ArrayList<Usuario>();
+    	try {
+			Connection con = ds.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT id_usuario, usuario, email FROM usuario");
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Usuario u = new Usuario();
+				u.setEmail(rs.getString("email"));
+				u.setId(rs.getInt("id_usuario"));
+				u.setUsuario(rs.getString("usuario"));
+				usuarios.add(u);
+			}
+		} catch (SQLException e) {e.printStackTrace();}
+        return usuarios;
+    }
+    
+    public Boolean save(Usuario u) {
+    	Boolean resultado = false;
+    	try {
+			Connection con = ds.getConnection();
+			PreparedStatement ps = con.prepareStatement("INSERT INTO usuario (usuario, email, senha) VALUES (?, ?, ?)");
+			ps.setString(1, u.getUsuario());
+			ps.setString(2, u.getEmail());
+			ps.setString(3, u.getSenha());
+			ps.executeQuery();
+			resultado = true;
+		} catch (SQLException e) {e.printStackTrace();}
+        return resultado;
+    }
 }

@@ -68,11 +68,11 @@ public class CadastroUsuarioController implements Serializable {
     	}
     	//Inicializa elementos importantes
     	this.permissoesSelecionadas = new ArrayList<Integer>();
-    	this.listaUsuarios = usuarioDAO.listarTodos();
+    	this.listaUsuarios = usuarioDAO.listAll();
     	//O elemento de checkbox da tela usa uma lista do tipo SelectItem
     	this.permissoes = new ArrayList<SelectItem>();
     	//É necessário mapear a lista de permissões manualmente para o tipo SelectItem
-    	for (TipoPermissao p: this.tipoPermissaoDAO.listarTodos()) {
+    	for (TipoPermissao p: this.tipoPermissaoDAO.listAll()) {
     		//O primeiro elemento é a chave (oculta) e o segundo a descrição que aparecerá para o usuário em tela
     		SelectItem i = new SelectItem(p.getPermissao().id, p.getPermissao().name());		
     		this.permissoes.add(i);
@@ -92,7 +92,7 @@ public class CadastroUsuarioController implements Serializable {
     		this.usuario.getPermissoes().clear();
     		//Adiciona todas as permissões selecionadas em tela
     		for (Integer id: this.permissoesSelecionadas) {
-    			TipoPermissao permissao = tipoPermissaoDAO.encontrarPermissao(id);
+    			TipoPermissao permissao = tipoPermissaoDAO.findById(id);
     			//Chama método que adiciona o usuário para a permissão e vice-versa (necessário em relacionamento ManyToMany)
     			permissao.addUsuario(this.usuario);	
     		}
