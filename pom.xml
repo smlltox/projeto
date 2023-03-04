@@ -92,33 +92,11 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- JPA API, fornece a implementação Hibernate como OCR -->
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- EJB API, fornece escopos EJB e outras anotações relevantes -->
         <dependency>
             <groupId>org.jboss.spec.javax.ejb</groupId>
             <artifactId>jboss-ejb-api_3.2_spec</artifactId>
             <scope>provided</scope>
-        </dependency>
-
-        <!-- JSR-303 (Bean Validation) Implementation -->
-        <!-- Fornece anotações de validação como @Email -->
-        <!-- Inclui Hibernate Validator API -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- JSF API, framework de Back-end -->
@@ -128,20 +106,6 @@
 		    <version>2.3</version>
 		    <scope>provided</scope>
 		</dependency>
-
-        <!-- Annotation processor para gerar modelos no hibernate com typesafe criteria queries -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Annotation processor para indicar erros de compilação ao usar incorretamente anotação de validação do Hibernate -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator-annotation-processor</artifactId>
-            <scope>provided</scope>
-        </dependency>
         
         <!-- Primefaces API, framework de Front-end --> 
         <dependency>

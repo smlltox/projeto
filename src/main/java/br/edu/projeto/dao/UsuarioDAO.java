@@ -90,11 +90,11 @@ public class UsuarioDAO implements Serializable{
 				rs.next();
 				u.setId(rs.getInt("id_usuario"));
 				
-				PreparedStatement ps2 = con.prepareStatement("INSERT NTO permissao (id_usuario, id_tipo_permissao) VALUES (?, ?)");
+				PreparedStatement ps2 = con.prepareStatement("INSERT INTO permissao (id_usuario, id_tipo_permissao) VALUES (?, ?)");
 				ps2.setInt(1, u.getId());
 				for (TipoPermissao tp: u.getPermissoes()) {
 					ps2.setInt(2, tp.getId());
-					ps2.executeQuery();
+					ps2.execute();
 				}
 				con.commit();
 				resultado = true;
@@ -117,16 +117,17 @@ public class UsuarioDAO implements Serializable{
 				ps.setString(2, u.getEmail());
 				ps.setString(3, u.getSenha());
 				ps.setInt(4, u.getId());
+				ps.execute();	
 				
 				PreparedStatement ps2 = con.prepareStatement("DELETE FROM permissao WHERE id_usuario = ?");
 				ps2.setInt(1, u.getId());
-				ps2.executeQuery();			
+				ps2.execute();			
 				
 				PreparedStatement ps3 = con.prepareStatement("INSERT INTO permissao (id_usuario, id_tipo_permissao) VALUES (?, ?)");
 				ps3.setInt(1, u.getId());
 				for (TipoPermissao tp: u.getPermissoes()) {
 					ps3.setInt(2, tp.getId());
-					ps3.executeQuery();
+					ps3.execute();
 				}
 				con.commit();
 				resultado = true;
@@ -146,11 +147,11 @@ public class UsuarioDAO implements Serializable{
 	    	try {				
 				PreparedStatement ps = con.prepareStatement("DELETE FROM permissao WHERE id_usuario = ?");
 				ps.setInt(1, u.getId());
-				ps.executeQuery();
+				ps.execute();
 				
 				PreparedStatement ps2 = con.prepareStatement("DELETE FROM usuario WHERE id_usuario = ?");
 				ps2.setInt(1, u.getId());
-				ps2.executeQuery();
+				ps2.execute();
 				
 				con.commit();
 				resultado = true;

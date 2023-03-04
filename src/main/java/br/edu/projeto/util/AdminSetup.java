@@ -1,10 +1,5 @@
 package br.edu.projeto.util;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import javax.inject.Inject;
 import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import javax.servlet.ServletContextEvent;
@@ -40,7 +35,7 @@ public class AdminSetup implements ServletContextListener {
 	        admin.setSenha(passwordHash.generate(senhaPadrao.toCharArray()));
 	        admin.setUsuario("admin");
 	        TipoPermissao permissao = tipoPermissaoDAO.findById(Permissao.ADMINISTRADOR.id);
-	        permissao.addUsuario(admin);
+	        admin.getPermissoes().add(permissao);
 	        usuarioDAO.insert(admin);
         }
     }

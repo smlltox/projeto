@@ -30,5 +30,4 @@ public class Resources {
     public FacesContext produceFacesContext() {
         return FacesContext.getCurrentInstance();
     }
-
 }

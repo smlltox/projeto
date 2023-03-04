@@ -13,7 +13,6 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 
 import br.edu.projeto.model.TipoPermissao;
-import br.edu.projeto.model.Usuario;
 import br.edu.projeto.util.Permissao;
 
 @Stateful

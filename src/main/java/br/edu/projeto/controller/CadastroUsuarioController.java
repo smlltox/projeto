@@ -94,21 +94,21 @@ public class CadastroUsuarioController implements Serializable {
     		for (Integer id: this.permissoesSelecionadas) {
     			TipoPermissao permissao = tipoPermissaoDAO.findById(id);
     			//Chama método que adiciona o usuário para a permissão e vice-versa (necessário em relacionamento ManyToMany)
-    			permissao.addUsuario(this.usuario);	
+    			this.usuario.getPermissoes().add(permissao);
     		}
     		//Aplica Hash na senha
     		this.usuario.setSenha(this.passwordHash.generate(this.usuario.getSenha().toCharArray()));
 	        //Verifica se é um novo cadastro ou é a alteração de um cadastro
     		if (this.usuario.getId() == null) {
 	        	if (this.usuarioDAO.insert(this.usuario))
-	        		this.facesContext.addMessage(null, new FacesMessage("Usuário Criado"));
+	        		this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário Criado", null));
 	        	else
-	        		this.facesContext.addMessage(null, new FacesMessage("Falha ao Criar Usuário"));
+	        		this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha ao Criar Usuário", null));
 	        } else {
 	        	if (this.usuarioDAO.update(this.usuario))
-	        		this.facesContext.addMessage(null, new FacesMessage("Usuário Atualizado"));
+	        		this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário Atualizado", null));
 	        	else
-	        		this.facesContext.addMessage(null, new FacesMessage("Falha ao Atualizar Usuário"));
+	        		this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha ao Atualizar Usuário", null));
 	        }
     		//Após salvar usuário é necessário recarregar lista que popula tabela com os novos dados
 	        this.listaUsuarios = usuarioDAO.listAll();
