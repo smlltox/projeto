@@ -1,3 +1,4 @@
 /target/
-*.class
-target/m2e-wtp/web-resources/META-INF/maven/br.edu/projeto/pom.properties
+.settings/
+.factorypath
+.project
