@@ -39,11 +39,7 @@ public class LoginController {
 
     public void login() throws IOException{
     	if (facesContext.getExternalContext().getAuthType() != null) {
-    		try {
-    			throw new Exception();       	
-            } catch (Exception e) {
-                facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Existe um usuário autenticado! Use a opção logout primeiro.", ""));
-            }
+    		facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Existe um usuário autenticado! Use a opção logout primeiro.", ""));
     	} else {
 	    	Credential credential = new UsernamePasswordCredential(usuario.getUsuario(), new Password(usuario.getSenha()));
 	    	AuthenticationStatus status = securityContext.authenticate(
@@ -54,11 +50,7 @@ public class LoginController {
 	    		facesContext.getExternalContext().redirect("cadastro_usuario.xhtml");
 	    	else if (status.equals(AuthenticationStatus.SEND_FAILURE)) {
 	    		usuario = new Usuario();
-	    		try {
-	            	throw new Exception();       	
-	            } catch (Exception e) {
-	                facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login Inválido!", "Usuário ou senha incorretos."));
-	            }
+	            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login Inválido!", "Usuário ou senha incorretos."));
 	    	}
     	}
     }

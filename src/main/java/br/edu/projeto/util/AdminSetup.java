@@ -8,7 +8,6 @@ import javax.servlet.annotation.WebListener;
 
 import br.edu.projeto.dao.TipoPermissaoDAO;
 import br.edu.projeto.dao.UsuarioDAO;
-import br.edu.projeto.model.TipoPermissao;
 import br.edu.projeto.model.Usuario;
 
 //Executa classe uma única vez ao iniciar a aplicação no servidor
@@ -31,11 +30,9 @@ public class AdminSetup implements ServletContextListener {
         if (usuarioDAO.findByName("admin").getId() == null){ 	
 	    	admin = new Usuario();
 	        admin.setEmail("admin@admin.com");
-	        String senhaPadrao = "admin";
-	        admin.setSenha(passwordHash.generate(senhaPadrao.toCharArray()));
+	        admin.setSenha(passwordHash.generate("admin".toCharArray()));
 	        admin.setUsuario("admin");
-	        TipoPermissao permissao = tipoPermissaoDAO.findById(Permissao.ADMINISTRADOR.id);
-	        admin.getPermissoes().add(permissao);
+	        admin.getPermissoes().add(tipoPermissaoDAO.findById(Permissao.ADMINISTRADOR.id));
 	        usuarioDAO.insert(admin);
         }
     }
