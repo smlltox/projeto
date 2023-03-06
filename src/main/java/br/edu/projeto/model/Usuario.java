@@ -50,4 +50,8 @@ public class Usuario {
 	public List<TipoPermissao> getPermissoes() {
 		return permissoes;
 	}
+
+	public void setPermissoes(List<TipoPermissao> permissoes) {
+		this.permissoes = permissoes;
+	}
 }

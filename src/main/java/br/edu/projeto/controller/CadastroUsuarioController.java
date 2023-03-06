@@ -32,6 +32,7 @@ import br.edu.projeto.model.Usuario;
 //Torna classe disponível na camada de visão (html) - são chamados de Beans ou ManagedBeans (gerenciados pelo JSF/EJB)
 @Named
 public class CadastroUsuarioController implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	//Anotação que marca atributo para ser gerenciado pelo CDI
 	//O CDI criará uma instância do objeto automaticamente quando necessário
@@ -82,6 +83,7 @@ public class CadastroUsuarioController implements Serializable {
     //Chamado pelo botão novo
 	public void novoCadastro() {
         this.usuario = new Usuario();
+        this.permissoesSelecionadas.clear();
     }
 	
 	//Chamado ao salvar cadastro de usuário (novo ou edição)
@@ -121,7 +123,7 @@ public class CadastroUsuarioController implements Serializable {
 	//Realiza validações adicionais (não relizadas no modelo) e/ou complexas/interdependentes
 	private boolean usuarioValido() {
 		if (this.permissoesSelecionadas.isEmpty()) {
-			this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Selecione ao menos uma permissão para o novo usuário.", null));
+			this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Selecione ao menos uma permissão para o novo usuário.", null));
 			return false;
 		}			
 		if (this.usuario.getId() == null && this.usuarioDAO.findByName(this.usuario.getUsuario()).getId() != null) {
@@ -133,18 +135,15 @@ public class CadastroUsuarioController implements Serializable {
 	
 	//Chamado pelo botão remover da tabela
 	public void remover() {
-		try {
-			this.usuarioDAO.delete(this.usuario);
-			//Após excluir usuário é necessário recarregar lista que popula tabela com os novos dados
-			this.listaUsuarios = usuarioDAO.listAll();
-	        //Limpa seleção de usuário
-			this.usuario = null;
-	        this.facesContext.addMessage(null, new FacesMessage("Usuário Removido"));
-	        PrimeFaces.current().ajax().update("form:messages", "form:dt-usuarios");
-        } catch (Exception e) {
-            String errorMessage = getMensagemErro(e);
-            this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, null));
-        }
+		if (this.usuarioDAO.delete(this.usuario))
+			this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário Removido", null));
+		else 
+			this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha ao Remover Usuário", null));
+		//Após excluir usuário é necessário recarregar lista que popula tabela com os novos dados
+		this.listaUsuarios = usuarioDAO.listAll();
+        //Limpa seleção de usuário
+		this.usuario = null;
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-usuarios");
 	}
 	
 	//Chamado pelo botão alterar da tabela
@@ -154,19 +153,6 @@ public class CadastroUsuarioController implements Serializable {
 			this.permissoesSelecionadas.add(p.getId());
 		this.usuario.setSenha("");
 	}
-	
-	//Captura mensagem de erro das validações do Hibernate
-	private String getMensagemErro(Exception e) {
-        String erro = "Falha no sistema!. Contacte o administrador do sistema.";
-        if (e == null) 
-            return erro;
-        Throwable t = e;
-        while (t != null) {
-            erro = t.getLocalizedMessage();
-            t = t.getCause();
-        }
-        return erro;
-    }
 	
 	//GETs e SETs
 	//GETs são necessários para elementos visíveis em tela
