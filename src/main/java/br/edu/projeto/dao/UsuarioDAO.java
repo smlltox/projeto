@@ -96,7 +96,6 @@ public class UsuarioDAO implements Serializable{
 				u.setPermissoes(listPermissoesUsuario(u));
 				usuarios.add(u);
 			}
-			con.close();
 		} catch (SQLException e) {e.printStackTrace();
 		} finally {
 			DbUtil.closeResultSet(rs);
@@ -178,7 +177,6 @@ public class UsuarioDAO implements Serializable{
     	PreparedStatement ps = null;
     	PreparedStatement ps2 = null;
     	PreparedStatement ps3 = null;
-    	ResultSet rs = null;
     	try {
 	    	con = this.ds.getConnection();
 	    	con.setAutoCommit(false);
@@ -208,7 +206,6 @@ public class UsuarioDAO implements Serializable{
 			}
     	} catch (SQLException e) {e.printStackTrace();
     	} finally {
-			DbUtil.closeResultSet(rs);
 			DbUtil.closePreparedStatement(ps);
 			DbUtil.closePreparedStatement(ps2);
 			DbUtil.closePreparedStatement(ps3);
@@ -222,7 +219,6 @@ public class UsuarioDAO implements Serializable{
     	Connection con = null;
     	PreparedStatement ps = null;
     	PreparedStatement ps2 = null;
-    	ResultSet rs = null;
     	try {
 	    	con = this.ds.getConnection();
 	    	con.setAutoCommit(false);
@@ -243,7 +239,6 @@ public class UsuarioDAO implements Serializable{
 			}
     	} catch (SQLException e) {e.printStackTrace();
     	} finally {
-			DbUtil.closeResultSet(rs);
 			DbUtil.closePreparedStatement(ps);
 			DbUtil.closePreparedStatement(ps2);
 			DbUtil.closeConnection(con);

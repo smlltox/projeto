@@ -13,10 +13,7 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 
 import br.edu.projeto.model.Camiseta;
-import br.edu.projeto.model.TipoPermissao;
-import br.edu.projeto.model.Usuario;
 import br.edu.projeto.util.DbUtil;
-import br.edu.projeto.util.Permissao;
 
 //Classe DAO responsável pelas regras de negócio envolvendo operações de persistência de dados
 //Indica-se a acriação de um DAO específico para cada Modelo
@@ -94,9 +91,7 @@ public class CamisetaDAO implements Serializable{
 				ps.setString(3, c.getDescricao());	
 				ps.execute();
 				resultado = true;
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			} catch (SQLException e) {e.printStackTrace();}
     	} catch (SQLException e) {e.printStackTrace();
     	} finally {
 			DbUtil.closePreparedStatement(ps);
@@ -105,80 +100,43 @@ public class CamisetaDAO implements Serializable{
     	return resultado;
     }
     
-    public Boolean update(Usuario u) {
+    public Boolean update(Camiseta c) {
     	Boolean resultado = false;
     	Connection con = null;
     	PreparedStatement ps = null;
-    	PreparedStatement ps2 = null;
-    	PreparedStatement ps3 = null;
-    	ResultSet rs = null;
     	try {
 	    	con = this.ds.getConnection();
-	    	con.setAutoCommit(false);
 	    	try {				
-				ps = con.prepareStatement("UPDATE usuario SET usuario = ?,  email = ?, senha = ? WHERE id_usuario = ?");
-				ps.setString(1, u.getUsuario());
-				ps.setString(2, u.getEmail());
-				ps.setString(3, u.getSenha());
-				ps.setInt(4, u.getId());
+				ps = con.prepareStatement("UPDATE camiseta SET tamanho = ?, descricao = ? WHERE id_camiseta = ?");
+				ps.setString(1, c.getTamanho());
+				ps.setString(2, c.getDescricao());
+				ps.setLong(3, c.getIdCamiseta());
 				ps.execute();	
-				
-				ps2 = con.prepareStatement("DELETE FROM permissao WHERE id_usuario = ?");
-				ps2.setInt(1, u.getId());
-				ps2.execute();			
-				
-				ps3 = con.prepareStatement("INSERT INTO permissao (id_usuario, id_tipo_permissao) VALUES (?, ?)");
-				ps3.setInt(1, u.getId());
-				for (TipoPermissao tp: u.getPermissoes()) {
-					ps3.setInt(2, tp.getId());
-					ps3.execute();
-				}
-				con.commit();
 				resultado = true;
-			} catch (SQLException e) {
-				e.printStackTrace();
-				con.rollback();
-			}
+			} catch (SQLException e) {e.printStackTrace();}
     	} catch (SQLException e) {e.printStackTrace();
     	} finally {
-			DbUtil.closeResultSet(rs);
 			DbUtil.closePreparedStatement(ps);
-			DbUtil.closePreparedStatement(ps2);
-			DbUtil.closePreparedStatement(ps3);
 			DbUtil.closeConnection(con);
 		}
     	return resultado;
     }
     
-    public Boolean delete(Usuario u) {
+    public Boolean delete(Camiseta c) {
     	Boolean resultado = false;
     	Connection con = null;
     	PreparedStatement ps = null;
-    	PreparedStatement ps2 = null;
-    	ResultSet rs = null;
     	try {
 	    	con = this.ds.getConnection();
-	    	con.setAutoCommit(false);
 	    	try {				
-				ps = con.prepareStatement("DELETE FROM permissao WHERE id_usuario = ?");
-				ps.setInt(1, u.getId());
+				ps = con.prepareStatement("DELETE FROM camiseta WHERE id_camiseta = ?");
+				ps.setLong(1, c.getIdCamiseta());
 				ps.execute();
-				
-				ps2 = con.prepareStatement("DELETE FROM usuario WHERE id_usuario = ?");
-				ps2.setInt(1, u.getId());
-				ps2.execute();
-				
-				con.commit();
 				resultado = true;
-			} catch (SQLException e) {
-				e.printStackTrace();
-				con.rollback();
-			}
+			} catch (SQLException e) {e.printStackTrace();}
     	} catch (SQLException e) {e.printStackTrace();
     	} finally {
-			DbUtil.closeResultSet(rs);
 			DbUtil.closePreparedStatement(ps);
-			DbUtil.closePreparedStatement(ps2);
 			DbUtil.closeConnection(con);
 		}
     	return resultado;
