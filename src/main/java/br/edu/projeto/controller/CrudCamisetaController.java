@@ -40,16 +40,24 @@ public class CrudCamisetaController implements Serializable {
 	
 	private List<Camiseta> listaCamiseta;
 	
+	private Boolean rendNovoCadastro;
+	
 	//Anotação que força execução do método após o construtor da classe ser executado
     @PostConstruct
     public void init() {
     	//Inicializa elementos importantes
-    	this.listaCamiseta = camisetaDAO.listAll();
+    	this.setListaCamiseta(camisetaDAO.listAll());
     }
 	
     //Chamado pelo botão novo
 	public void novoCadastro() {
-        this.camiseta = new Camiseta();
+        this.setCamiseta(new Camiseta());
+        this.setRendNovoCadastro(true);
+    }
+	
+	//Chamado pelo botão alterar
+	public void alterarCadastro() {
+        this.setRendNovoCadastro(false);
     }
 	
 	//Chamado pelo botão remover da tabela
@@ -71,7 +79,7 @@ public class CrudCamisetaController implements Serializable {
 		if (this.camiseta.getTamanho().equals("P") || this.camiseta.getTamanho().equals("M") || this.camiseta.getTamanho().equals("G"))
 		{
 			if (this.camisetaDAO.insert(this.camiseta)) {
-				this.listaCamiseta.add(this.camiseta);
+				this.getListaCamiseta().add(this.camiseta);
 				PrimeFaces.current().executeScript("PF('camisetaDialog').hide()");
 				PrimeFaces.current().ajax().update("form:dt-camiseta");
 				this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Camiseta Criada", null));
@@ -95,7 +103,8 @@ public class CrudCamisetaController implements Serializable {
         		this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha ao Atualizar Camiseta", null));
 		} else {
 			this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Tamanho da camiseta inválido, deve ser P, M ou G!", null));
-    	}   
+    	}
+		this.setListaCamiseta(camisetaDAO.listAll());
 		PrimeFaces.current().ajax().update("form:messages");
 	}
 	
@@ -116,5 +125,13 @@ public class CrudCamisetaController implements Serializable {
 
 	public void setListaCamiseta(List<Camiseta> listaCamiseta) {
 		this.listaCamiseta = listaCamiseta;
+	}
+
+	public Boolean getRendNovoCadastro() {
+		return rendNovoCadastro;
+	}
+
+	public void setRendNovoCadastro(Boolean rendNovoCadastro) {
+		this.rendNovoCadastro = rendNovoCadastro;
 	}
 }

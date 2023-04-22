@@ -27,7 +27,7 @@
 	                <p:outputPanel rendered="#{not empty crudCamisetaController.camiseta}">
 	                    <div class="field">
 	                        <p:outputLabel for="id">Id Camiseta</p:outputLabel>
-	                        <p:inputText id="id" value="#{crudCamisetaController.camiseta.idCamiseta}" required="true" />
+	                        <p:inputText id="id" value="#{crudCamisetaController.camiseta.idCamiseta}" required="true" disabled="#{not crudCamisetaController.rendNovoCadastro}" />
 	                    </div>
 	                    <div class="field">
 	                        <p:outputLabel for="descricao">Descrição</p:outputLabel>
@@ -42,9 +42,9 @@
 	
 	            <f:facet name="footer">
 	                <p:commandButton value="Salvar Novo" icon="pi pi-check" actionListener="#{crudCamisetaController.salvarNovo()}"
-	                    update="camiseta-conteudo-dialog dialogs:messages" process="camiseta-conteudo-dialog @this" />
+	                    update="camiseta-conteudo-dialog dialogs:messages form:dt-camisetas" process="camiseta-conteudo-dialog @this" rendered="#{crudCamisetaController.rendNovoCadastro}"/>
 	                <p:commandButton value="Salvar Alteração" icon="pi pi-check" actionListener="#{crudCamisetaController.salvarAlteracao()}"
-	                    update="camiseta-conteudo-dialog dialogs:messages" process="camiseta-conteudo-dialog @this" />
+	                    update="camiseta-conteudo-dialog dialogs:messages form:dt-camisetas" process="camiseta-conteudo-dialog @this" rendered="#{not crudCamisetaController.rendNovoCadastro}"/>
 	                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('camisetaDialog').hide()" class="ui-button-secondary" type="button" />
 	            </f:facet>
 	        </p:dialog>
@@ -65,7 +65,7 @@
             <p:toolbar>
 	            <p:toolbarGroup>
 	                <p:commandButton value="Novo" icon="pi pi-plus" actionListener="#{crudCamisetaController.novoCadastro}"
-	                    update=":dialogs:camiseta-conteudo-dialog" oncomplete="PF('camisetaDialog').show()"
+	                    update=":dialogs" oncomplete="PF('camisetaDialog').show()"
 	                    styleClass="ui-button-success" style="margin-right: .5rem">
 	                    <p:resetInput target=":dialogs:camiseta-conteudo-dialog" />
 	                </p:commandButton>
@@ -96,8 +96,8 @@
 	            	<!-- é possível disparar ações para diversos eventos Javascript, deve-se cuidar a ordem da resolução dos mesmos -->
 	            	<!-- como regra geral a prioridade de processamento é a seguinte (eventos on... - oncomplete, onclick, onblur, actionListener, action, oncomplete no final) -->
 	            	<!-- PF é usado para chamada de função Javascript de algum elemento do Primefaces -->
-	                <p:commandButton icon="pi pi-pencil" update=":dialogs:camiseta-conteudo-dialog" 
-	                    oncomplete="PF('camisetaDialog').show()"
+	                <p:commandButton icon="pi pi-pencil" update=":dialogs" 
+	                    oncomplete="PF('camisetaDialog').show()" action="#{crudCamisetaController.alterarCadastro()}"
 	                    styleClass="edit-button rounded-button ui-button-success" process="@this">
 	                    <f:setPropertyActionListener value="#{camiseta}" target="#{crudCamisetaController.camiseta}" />
 	                    <p:resetInput target=":dialogs:camiseta-conteudo-dialog" />
