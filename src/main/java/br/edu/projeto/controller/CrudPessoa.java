@@ -24,16 +24,16 @@ public class CrudPessoa implements Serializable {
 	//O CDI criará uma instância do objeto automaticamente quando necessário
 	@Inject
 	private FacesContext facesContext;
-	
+
 	@Inject
-    private PessoaDAO pessoaDAO;
-	
+	private PessoaDAO pessoaDAO;
+
 	private Pessoa pessoa;
-	
+
 	private List<Pessoa> listaPessoa;
-	
+
 	private Boolean rendNovoCadastro;
-	
+
 	//Anotação que força execução do método após o construtor da classe ser executado
     @PostConstruct
     public void init() {
