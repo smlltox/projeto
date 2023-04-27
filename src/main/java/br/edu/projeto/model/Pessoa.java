@@ -2,15 +2,39 @@ package br.edu.projeto.model;
 
 public class Pessoa {
 	//atribu
+	
+    @NotNull
+    @Size(min = 1, max = 25)
+    @Pattern(regexp = "[^0-9]*", message = "Must not contain numbers")
     private String nome;
+	
+    @Size(min = 1, max = 25)
+    @Pattern(regexp = "[^0-9]*", message = "Must not contain numbers")
     private String nome_sc;
+	
+    @NotNull
+    
     private String cpf;
+	
+    @NotNull
     private int height;
+	
+    @NotNull
     private int peso;
+	
+    @NotNull
     private int idade;
+	
+    @NotNull
     private String genero;
+	
+    @NotNull
     private String email;
+	
+	
     private String telf;
+	
+	
     private String endereco;
     
     //public Pessoa(String nome, String nome_sc, int idade, String genero, String endereco, String cpf, int height, int peso, String telf) {
