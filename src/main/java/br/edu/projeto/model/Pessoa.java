@@ -17,6 +17,8 @@ public class Pessoa {
     private String cpf;
 	
     @NotNull
+    @Size(decumalMax = 2)
+    >0
     private int height;
 	
     @NotNull
@@ -29,6 +31,7 @@ public class Pessoa {
     private String genero;
 	
     @NotNull
+    @Email
     private String email;
 	
 	
