@@ -1,30 +1,44 @@
 package br.edu.projeto.model;
 
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+
+
 public class Pessoa {
-	//atribu
+	//atributos
 	
     @NotNull
     @Size(min = 1, max = 25)
     @Pattern(regexp = "[^0-9]*", message = "Must not contain numbers")
     private String nome;
 	
+    @NotNull
     @Size(min = 1, max = 25)
     @Pattern(regexp = "[^0-9]*", message = "Must not contain numbers")
     private String nome_sc;
 	
     @NotNull
-    
+    @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "CPF inválido")
     private String cpf;
 	
     @NotNull
-    @Size(decumalMax = 2)
-    >0
+    @Size(max = 2)
+    @Positive(message = "O valor deve ser maior que zero")
     private int height;
 	
     @NotNull
+    @Positive(message = "O valor deve ser maior que zero")
+    @Min(value = 1, message = "O valor deve ser um número inteiro")
     private int peso;
 	
     @NotNull
+    @Positive(message = "O valor deve ser maior que zero")
+    @Min(value = 1, message = "O valor deve ser um número inteiro")
     private int idade;
 	
     @NotNull
@@ -34,7 +48,7 @@ public class Pessoa {
     @Email
     private String email;
 	
-	
+    @Pattern(regexp = "\\(\\d{2}\\)\\d{5}\\-\\d{4}", message = "Telefone inválido")
     private String telf;
 	
 	
@@ -65,7 +79,7 @@ public class Pessoa {
     }
     
     public void setNomesc(String nome_sc) {
-        this.nome = nome_sc;
+        this.nome_sc = nome_sc;
     }
     public int getIdade() {
         return idade;
