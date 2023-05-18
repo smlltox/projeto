@@ -12,15 +12,17 @@ import javax.validation.constraints.Min;
 public class Pessoa {
 	//atributos
 	
+	@NotNull
+	private int id;
+	
     @NotNull
     @Size(min = 1, max = 25)
     @Pattern(regexp = "[^0-9]*", message = "Must not contain numbers")
     private String nome;
 	
-    @NotNull
     @Size(min = 1, max = 25)
     @Pattern(regexp = "[^0-9]*", message = "Must not contain numbers")
-    private String nome_sc;
+    private String nomesc;
 	
     @NotNull
     @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "CPF inválido")
@@ -48,11 +50,11 @@ public class Pessoa {
     @Email
     private String email;
 	
-    @Pattern(regexp = "\\(\\d{2}\\)\\d{5}\\-\\d{4}", message = "Telefone inválido")
+    @Pattern(regexp = "(\\d{2}\\)\\d{5}\\-\\d{4}", message = "Número de telefone inválido")
     private String telf;
 	
-	
     private String endereco;
+    
     
     //public Pessoa(String nome, String nome_sc, int idade, String genero, String endereco, String cpf, int height, int peso, String telf) {
     //    this.nome = nome;
@@ -66,6 +68,14 @@ public class Pessoa {
     //    this.telf = telf;
     //}
     
+    public int getId() {
+        return id;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public String getNome() {
         return nome;
     }
@@ -75,12 +85,13 @@ public class Pessoa {
     }
 
     public String getNomesc() {
-        return nome_sc;
+        return nomesc;
     }
     
-    public void setNomesc(String nome_sc) {
-        this.nome_sc = nome_sc;
+    public void setNomesc(String nomesc) {
+        this.nomesc = nomesc;
     }
+    
     public int getIdade() {
         return idade;
     }
@@ -121,6 +132,7 @@ public class Pessoa {
     public void setHeight(int height) {
         this.height = height;
     }
+    
     public int getPeso() {
         return peso;
     }
@@ -137,11 +149,11 @@ public class Pessoa {
         this.email = email;
     }
     
-    public String getTelefone() {
+    public String getTelf() {
         return telf;
     }
     
-    public void setTelefone(String telf) {
+    public void setTelf(String telf) {
         this.telf = telf;
     }
 }

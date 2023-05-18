@@ -34,10 +34,11 @@ public class PessoaDAO implements Serializable{
     	ResultSet rs = null;//Resposta do SGBD
     	try {
 			con = this.ds.getConnection();//Pegar um conexão
-			ps = con.prepareStatement("SELECT name, social_nm, cpf, height, peso, genero, age, email, tlfon, ender FROM clientes");
+			ps = con.prepareStatement("SELECT id, name, social_nm, cpf, height, peso, genero, age, email, tlfon, ender FROM clientes");
 			rs = ps.executeQuery();
 			while (rs.next()) {//Pega próxima linha do retorno
 				Pessoa p = new Pessoa();
+				p.setId(rs.getInt("id"));
 				p.setNome(rs.getString("name"));
 				p.setNomesc(rs.getString("social_nm"));
 				p.setCpf(rs.getString("cpf"));
@@ -46,7 +47,7 @@ public class PessoaDAO implements Serializable{
 				p.setGenero(rs.getString("genero"));
 				p.setIdade(rs.getInt("age"));
 				p.setEmail(rs.getString("email"));
-				p.setTelefone(rs.getString("tlfon"));
+				p.setTelf(rs.getString("tlfon"));
 				p.setEndereco(rs.getString("ender"));
 				pessoa.add(p);
 			}
@@ -66,7 +67,7 @@ public class PessoaDAO implements Serializable{
     	try {
 	    	con = this.ds.getConnection();
 	    	try {				
-				ps = con.prepareStatement("INSERT INTO clientes (name, social_nm, cpf, height, peso, genero, age, email, tlfon, ender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+				ps = con.prepareStatement("INSERT INTO clientes (name, social_nm, cpf, height, peso, genero, age, email, tlfon, ender, id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 				ps.setString(1, p.getNome());
 				ps.setString(2, p.getNomesc());
 				ps.setString(3, p.getCpf());	
@@ -75,8 +76,9 @@ public class PessoaDAO implements Serializable{
 				ps.setString(6, p.getGenero());
 				ps.setInt(7, p.getIdade());
 				ps.setString(8, p.getEmail());
-				ps.setString(9, p.getTelefone());
+				ps.setString(9, p.getTelf());
 				ps.setString(10, p.getEndereco());
+				ps.setInt(11, p.getId());
 				ps.execute();
 				resultado = true;
 			} catch (SQLException e) {e.printStackTrace();}
@@ -95,17 +97,16 @@ public class PessoaDAO implements Serializable{
     	try {
 	    	con = this.ds.getConnection();
 	    	try {				
-				ps = con.prepareStatement("UPDATE clientes SET name = ?, social_nm = ?, height = ?, peso = ?, genero = ?, age = ?, email = ?, tlfon = ?, ender = ? WHERE cpf = ?");
-				ps.setString(1, p.getNome());
-				ps.setString(2, p.getNomesc());
-				ps.setString(3, p.getCpf());	
+				ps = con.prepareStatement("UPDATE clientes SET social_nm = ?, height = ?, peso = ?, genero = ?, age = ?, email = ?, tlfon = ?, ender = ? WHERE id = ?");
+				ps.setString(2, p.getNomesc());	
 				ps.setInt(4, p.getHeight());
 				ps.setInt(5, p.getPeso());
 				ps.setString(6, p.getGenero());
 				ps.setInt(7, p.getIdade());
 				ps.setString(8, p.getEmail());
-				ps.setString(9, p.getTelefone());
+				ps.setString(9, p.getTelf());
 				ps.setString(10, p.getEndereco());
+				ps.setInt(11, p.getId());
 				ps.execute();	
 				resultado = true;
 			} catch (SQLException e) {e.printStackTrace();}
@@ -124,8 +125,8 @@ public class PessoaDAO implements Serializable{
     	try {
 	    	con = this.ds.getConnection();
 	    	try {				
-				ps = con.prepareStatement("DELETE FROM clientes WHERE cpf = ?");
-				ps.setString(1, p.getCpf());
+				ps = con.prepareStatement("DELETE FROM clientes WHERE id = ?");
+				ps.setInt(1, p.getId());
 				ps.execute();
 				resultado = true;
 			} catch (SQLException e) {e.printStackTrace();}

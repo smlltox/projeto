@@ -27,7 +27,6 @@ public class LoginController {
 	@Inject
     private FacesContext facesContext;
 
-    @SuppressWarnings("cdi-ambiguous-dependency")
     @Inject
     private SecurityContext securityContext;
 

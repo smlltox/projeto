@@ -41,7 +41,6 @@ public class CadastroUsuarioController implements Serializable {
 	
 	//atributos que não podem ser serializáveis (normalmente dependências externas) devem ser marcados como transient 
 	//(eles são novamente criados a cada nova requisição independente do escopo da classe)
-	@SuppressWarnings("cdi-ambiguous-dependency")
 	@Inject
     transient private Pbkdf2PasswordHash passwordHash;
 	
