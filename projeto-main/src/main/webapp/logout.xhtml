@@ -1,0 +1,29 @@
+<!-- Página sem template de exemplo -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+    <title>projeto</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</h:head>
+
+<h:body>
+    <h:form>
+    	<p:panelGrid width="400" columns="1">
+	    	
+	    	<h1>Você realizou o Logout!</h1>
+
+	    	<p:commandButton value="Voltar à página de login" action="login?faces-redirect=true"/>
+	    	<p:clock displayMode="analog"/>
+
+       	</p:panelGrid>
+   	</h:form>
+</h:body>
+
+</html>
