@@ -1,0 +1,28 @@
+-- Table: public.clientes
+
+-- DROP TABLE IF EXISTS public.clientes;
+
+CREATE TABLE IF NOT EXISTS public.clientes
+(
+    name text COLLATE pg_catalog."default" NOT NULL,
+    social_nm text COLLATE pg_catalog."default",
+    id integer NOT NULL,
+    height integer NOT NULL,
+    peso integer NOT NULL,
+    genero text COLLATE pg_catalog."default" NOT NULL,
+    age integer NOT NULL,
+    email text COLLATE pg_catalog."default" NOT NULL,
+    tlfon integer,
+    ender text COLLATE pg_catalog."default",
+    cpf text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT clientes_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.clientes
+    OWNER to postgres;
+
+GRANT DELETE, INSERT, SELECT, UPDATE ON TABLE public.clientes TO aplicacao_user;
+
+GRANT ALL ON TABLE public.clientes TO postgres;
