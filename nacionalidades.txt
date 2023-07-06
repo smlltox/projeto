@@ -1,0 +1,19 @@
+-- Table: public.nacionalidades
+
+-- DROP TABLE IF EXISTS public.nacionalidades;
+
+CREATE TABLE IF NOT EXISTS public.nacionalidades
+(
+    id integer NOT NULL,
+    tipo text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT nacionalidades_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.nacionalidades
+    OWNER to postgres;
+
+GRANT DELETE, INSERT, SELECT, UPDATE ON TABLE public.nacionalidades TO aplicacao_user;
+
+GRANT ALL ON TABLE public.nacionalidades TO postgres;
