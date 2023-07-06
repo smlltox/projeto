@@ -71,8 +71,8 @@ public class PessoaDAO implements Serializable{
 				ps.setString(1, p.getNome());
 				ps.setString(2, p.getNomesc());
 				ps.setString(3, p.getCpf());	
-				ps.setFloat(4, p.getHeight());
-				ps.setFloat(5, p.getPeso());
+				ps.setInt(4, p.getHeight());
+				ps.setInt(5, p.getPeso());
 				ps.setString(6, p.getGenero());
 				ps.setInt(7, p.getIdade());
 				ps.setString(8, p.getEmail());
@@ -96,20 +96,20 @@ public class PessoaDAO implements Serializable{
     	PreparedStatement ps = null;
     	try {
 	    	con = this.ds.getConnection();
-	    	try {
-	            ps = con.prepareStatement("UPDATE clientes SET social_nm = ?, height = ?, peso = ?, genero = ?, age = ?, email = ?, tlfon = ?, ender = ? WHERE id = ?");
-	            ps.setString(1, p.getNomesc());
-	            ps.setFloat(2, p.getHeight());
-	            ps.setFloat(3, p.getPeso());
-	            ps.setString(4, p.getGenero());
-	            ps.setInt(5, p.getIdade());
-	            ps.setString(6, p.getEmail());
-	            ps.setString(7, p.getTelf());
-	            ps.setString(8, p.getEndereco());
-	            ps.setInt(9, p.getId());
-	            ps.execute();
-	            resultado = true;
-	        } catch (SQLException e) {e.printStackTrace();}
+	    	try {				
+				ps = con.prepareStatement("UPDATE clientes SET social_nm = ?, height = ?, peso = ?, genero = ?, age = ?, email = ?, tlfon = ?, ender = ? WHERE id = ?");
+				ps.setString(2, p.getNomesc());	
+				ps.setInt(4, p.getHeight());
+				ps.setInt(5, p.getPeso());
+				ps.setString(6, p.getGenero());
+				ps.setInt(7, p.getIdade());
+				ps.setString(8, p.getEmail());
+				ps.setString(9, p.getTelf());
+				ps.setString(10, p.getEndereco());
+				ps.setInt(11, p.getId());
+				ps.execute();	
+				resultado = true;
+			} catch (SQLException e) {e.printStackTrace();}
     	} catch (SQLException e) {e.printStackTrace();
     	} finally {
 			DbUtil.closePreparedStatement(ps);

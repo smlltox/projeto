@@ -17,9 +17,13 @@ import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import org.primefaces.PrimeFaces;
 
 import br.edu.projeto.dao.TipoPermissaoDAO;
+import br.edu.projeto.dao.NacionalidadeDAO;
 import br.edu.projeto.dao.UsuarioDAO;
 import br.edu.projeto.model.TipoPermissao;
+import br.edu.projeto.model.Nacionalidades;
 import br.edu.projeto.model.Usuario;
+
+
 
 //Escopo do objeto da classe (Bean)
 //ApplicationScoped é usado quando o objeto é único na aplicação (compartilhado entre usuários), permanece ativo enquanto a aplicação estiver ativa
@@ -50,13 +54,17 @@ public class CadastroUsuarioController implements Serializable {
 	@Inject
     private TipoPermissaoDAO tipoPermissaoDAO;
 	
+	@Inject
+    private NacionalidadeDAO nacionalidadeDAO;
+	
 	private Usuario usuario;
 	
 	private List<Usuario> listaUsuarios;
 	
 	private List<SelectItem> permissoes;
-	
 	private List<Integer> permissoesSelecionadas;
+	private List<SelectItem> nacs;
+    private List<Integer> nacsSelecionadas;
 	
 	//Anotação que força execução do método após o construtor da classe ser executado
     @PostConstruct
@@ -69,21 +77,30 @@ public class CadastroUsuarioController implements Serializable {
     	}
     	//Inicializa elementos importantes
     	this.permissoesSelecionadas = new ArrayList<Integer>();
+    	this.nacsSelecionadas = new ArrayList<Integer>();
     	this.listaUsuarios = usuarioDAO.listAll();
     	//O elemento de checkbox da tela usa uma lista do tipo SelectItem
     	this.permissoes = new ArrayList<SelectItem>();
+    	this.nacs = new ArrayList<SelectItem>();
     	//É necessário mapear a lista de permissões manualmente para o tipo SelectItem
     	for (TipoPermissao p: this.tipoPermissaoDAO.listAll()) {
     		//O primeiro elemento é a chave (oculta) e o segundo a descrição que aparecerá para o usuário em tela
     		SelectItem i = new SelectItem(p.getPermissao().id, p.getPermissao().name());		
     		this.permissoes.add(i);
     	}
+    	for (Nacionalidades p: this.nacionalidadeDAO.listAll()) {
+    		//O primeiro elemento é a chave (oculta) e o segundo a descrição que aparecerá para o usuário em tela
+    		SelectItem i = new SelectItem(p.getNacionalidade().id, p.getNacionalidade().name());		
+    		this.nacs.add(i);
+    	}
+    	
     }
 	
     //Chamado pelo botão novo
 	public void novoCadastro() {
         this.usuario = new Usuario();
         this.permissoesSelecionadas.clear();
+        this.nacsSelecionadas.clear();
     }
 	
 	//Chamado ao salvar cadastro de usuário (novo ou edição)
@@ -92,11 +109,18 @@ public class CadastroUsuarioController implements Serializable {
         if (usuarioValido()) {
         	//Limpa lista de permissões de usuário (é mais simples limpar e adicionar todas novamente depois)
     		this.usuario.getPermissoes().clear();
+    		this.usuario.getNacionalidades().clear();
     		//Adiciona todas as permissões selecionadas em tela
     		for (Integer id: this.permissoesSelecionadas) {
     			TipoPermissao permissao = tipoPermissaoDAO.findById(id);
     			//Chama método que adiciona o usuário para a permissão e vice-versa (necessário em relacionamento ManyToMany)
     			this.usuario.getPermissoes().add(permissao);
+    		}
+    		//Adiciona todas as nacionalidades selecionadas em tela
+    		for (Integer id: this.nacsSelecionadas) {
+    			Nacionalidades nacs = nacionalidadeDAO.findById(id);
+    			//Chama método que adiciona o usuário para a permissão e vice-versa (necessário em relacionamento ManyToMany)
+    			this.usuario.getNacionalidades().add(nacs);
     		}
     		//Aplica Hash na senha
     		this.usuario.setSenha(this.passwordHash.generate(this.usuario.getSenha().toCharArray()));
@@ -125,7 +149,11 @@ public class CadastroUsuarioController implements Serializable {
 		if (this.permissoesSelecionadas.isEmpty()) {
 			this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Selecione ao menos uma permissão para o novo usuário.", null));
 			return false;
-		}			
+		}
+		if (this.nacsSelecionadas.isEmpty()) {
+			this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Selecione ao menos uma nacionalidade para o novo usuário.", null));
+			return false;
+		}
 		if (this.usuario.getId() == null && this.usuarioDAO.findByName(this.usuario.getUsuario()).getId() != null) {
 			this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Este nome de usuário já está em uso.", null));
 			return false;
@@ -149,8 +177,11 @@ public class CadastroUsuarioController implements Serializable {
 	//Chamado pelo botão alterar da tabela
 	public void alterar() {
 		this.permissoesSelecionadas.clear();
+		this.nacsSelecionadas.clear();
 		for (TipoPermissao p: this.usuario.getPermissoes())
 			this.permissoesSelecionadas.add(p.getId());
+		for (Nacionalidades n: this.usuario.getNacionalidades())
+			this.nacsSelecionadas.add(n.getId());
 		this.usuario.setSenha("");
 	}
 	
@@ -189,4 +220,20 @@ public class CadastroUsuarioController implements Serializable {
 		this.permissoesSelecionadas = permissoesSelecionadas;
 	}
 
+	public List<SelectItem> getNacionalidades() {
+        return nacs;
+    }
+	
+	public void setNacionalidades(List<SelectItem> nacs) {
+		this.nacs = nacs;
+	}
+
+
+    public List<Integer> getNacsSelecionadas() {
+        return nacsSelecionadas;
+    }
+
+    public void setNacsSelecionadas(List<Integer> nacsSelecionadas) {
+        this.nacsSelecionadas = nacsSelecionadas;
+    }
 }

@@ -16,11 +16,11 @@ public class Pessoa {
 	private int id;
 	
     @NotNull
-    //@Size(min = 1, max = 25)
+    @Size(min = 1, max = 25)
     @Pattern(regexp = "[^0-9]*", message = "Must not contain numbers")
     private String nome;
 	
-    //@Size(min = 1, max = 25)
+    @Size(min = 1, max = 25)
     @Pattern(regexp = "[^0-9]*", message = "Must not contain numbers")
     private String nomesc;
 	
@@ -29,14 +29,14 @@ public class Pessoa {
     private String cpf;
 	
     @NotNull
-    //@Size(max = 2)
+    @Size(max = 2)
     @Positive(message = "O valor deve ser maior que zero")
-    private float height;
+    private int height;
 	
     @NotNull
     @Positive(message = "O valor deve ser maior que zero")
     @Min(value = 1, message = "O valor deve ser um número inteiro")
-    private float peso;
+    private int peso;
 	
     @NotNull
     @Positive(message = "O valor deve ser maior que zero")
@@ -50,7 +50,7 @@ public class Pessoa {
     @Email
     private String email;
 	
-    @Pattern(regexp = "(\\d{2})\\d{5}\\-\\d{4}", message = "Número de telefone inválido")
+    @Pattern(regexp = "(\\d{2}\\)\\d{5}\\-\\d{4}", message = "Número de telefone inválido")
     private String telf;
 	
     private String endereco;
@@ -125,19 +125,19 @@ public class Pessoa {
         this.cpf = cpf;
     }
 
-    public float getHeight() {
+    public int getHeight() {
         return height;
     }
     
-    public void setHeight(float height) {
+    public void setHeight(int height) {
         this.height = height;
     }
     
-    public float getPeso() {
+    public int getPeso() {
         return peso;
     }
     
-    public void setPeso(float peso) {
+    public void setPeso(int peso) {
         this.peso = peso;
     }
     

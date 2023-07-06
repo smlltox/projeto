@@ -74,7 +74,7 @@
 	
 	            <f:facet name="footer">
 	                <p:commandButton value="Salvar Novo" icon="pi pi-check" actionListener="#{crudPessoaController.salvarNovo()}"
-	                    update="pessoa-conteudo-dialog dialogs:messages form:dt-pessoa" process="pessoa-conteudo-dialog @this"/>
+	                    update="pessoa-conteudo-dialog dialogs:messages form:dt-pessoa" process="pessoa-conteudo-dialog @this" rendered="#{crudPessoa.rendNovoCadastro}"/>
 	                <p:commandButton value="Salvar Alteração" icon="pi pi-check" actionListener="#{crudPessoaController.salvarAlteracao()}"
 	                    update="pessoa-conteudo-dialog dialogs:messages form:dt-pessoa" process="pessoa-conteudo-dialog @this" rendered="#{not crudPessoaController.rendNovoCadastro}"/>
 	                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('pessoaDialog').hide()" class="ui-button-secondary" type="button" />

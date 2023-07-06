@@ -14,6 +14,8 @@ public class Usuario {
     private String email;
     
     private List<TipoPermissao> permissoes = new ArrayList<TipoPermissao>();
+    
+    private List<Nacionalidades> nacs = new ArrayList<Nacionalidades>();
 
 	public Integer getId() {
 		return id;
@@ -53,5 +55,13 @@ public class Usuario {
 
 	public void setPermissoes(List<TipoPermissao> permissoes) {
 		this.permissoes = permissoes;
+	}
+	
+	public List<Nacionalidades> getNacionalidades() {
+		return nacs;
+	}
+
+	public void setNacionalidades(List<Nacionalidades> nacs) {
+		this.nacs = nacs;
 	}
 }

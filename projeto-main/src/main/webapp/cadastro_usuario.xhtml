@@ -39,11 +39,17 @@
 	                        feedback="true" weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte" validatorMessage="Informe a senha"/>
 	                    </div>
 	                    <div class="field">
-                        <p:outputLabel for="permissao">Permissão</p:outputLabel>
-                        <p:selectCheckboxMenu id="permissao" value="#{cadastroUsuarioController.permissoesSelecionadas}" label="Selecione uma permissão">
-                            <f:selectItems value="#{cadastroUsuarioController.permissoes}"/>
-                        </p:selectCheckboxMenu>
-                    </div>
+	                        <p:outputLabel for="permissao">Permissão</p:outputLabel>
+	                        <p:selectCheckboxMenu id="permissao" value="#{cadastroUsuarioController.permissoesSelecionadas}" label="Selecione uma permissão">
+	                            <f:selectItems value="#{cadastroUsuarioController.permissoes}"/>
+	                        </p:selectCheckboxMenu>
+	                    </div>
+	                    <div class="field">
+	                        <p:outputLabel for="nacionalidade">Nacionalidade</p:outputLabel>
+	                        <p:selectCheckboxMenu id="nacionalidade" value="#{cadastroUsuarioController.nacsSelecionadas}" label="Selecione uma nacionalidade">
+	                            <f:selectItems value="#{cadastroUsuarioController.nacs}"/>
+	                        </p:selectCheckboxMenu>
+	                    </div>
 	                </p:outputPanel>
 	            </p:outputPanel>
 	
